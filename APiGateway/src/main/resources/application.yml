@@ -1,0 +1,19 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: PBX
+          uri: http://pbx:8081/
+          predicates:
+            - Path=/pbx/**
+        - id: CDR
+          uri: http://cdr:8082/
+          predicates:
+            - Path=/cdr/**
+        - id: PhoneBook
+          uri: http://phoneBook:8083/
+          predicates:
+            - Path=/phonebook/**

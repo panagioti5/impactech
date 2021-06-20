@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  mock_pbx_app:
+    container_name: mock_pbx
+    ports:
+      - "3030:3030"
+    build:
+      context: ./backend-assignment/mock_pbx
+  db:
+    image: postgres:alpine
+    volumes:
+      - ./postgres/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=exercise
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=sa
+    container_name: db_container
+  api_gateway-app:
+    links: 
+      - db
+    build:
+      context: ./APiGateway
+    container_name: gateway
+    ports:
+      - "8080:8080"
+  cdr-app:
+    depends_on: 
+      - mock_pbx_app
+    ports:
+      - "8082:8082"
+    links: 
+      - db
+    build:
+      context: ./cdr
+    container_name: cdr
+  pbx-app:
+    links: 
+      - db
+    build:
+      context: ./pbx
+    container_name: pbx
+    ports:
+      - "8081:8081"
+  phone_book-app:
+    links: 
+      - db
+    ports:
+      - "8083:8083"
+    build:
+      context: ./PhoneBook
+    container_name: phoneBook

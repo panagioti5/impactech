@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: PBX
+server:
+  port: 8081
